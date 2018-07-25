@@ -96,31 +96,71 @@ class Network2 extends Thread{
 
         //Step 8 here
 		sen("ACK "+r);
-		int flag=1;
-		int i=0;
-		Network1 net1=new Network1();
-		net1.is=is;
-		net1.start();
-    	while (net1.flag==0) {
-    		//sen("hello???");
-    		try {
-				this.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}       
+
+        int tolerance = 4;
+        while(true){
+            try{
+                s = inS();
+                String[] SBs = s.split(" ");
+                if(SBs[0].equals("ACK") && Integer.parseInt(SBs[1]) == r){
+                    System.out.println("AP 收到MSg4,正常接收消息");
+                    break;
+                }
+                else{
+                    System.out.println("AP 收到Msg4丢失时候发送的信息");
+
+                    // s=inS();
+                    if(s.equals("OUTPUTCOMPLETE") == false) {
+                        System.out.println("nounce is :"+Nonce);
+                        System.out.println("Normal receiving : "+(ccmp.xo(s, Nonce)));
+                        System.out.println("Trans receiving : "+enc(ccmp.xo(s, Nonce)));
+                        Nonce++;
+                        // break;
+                    }
+                    tolerance --;
+                    if(tolerance == 0){
+                        r++;
+                        sen("ACK "+r);
+                        System.out.println("AP 重发Msg3");
+                        break;
+                    }
+                   
+                    
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+            
+        }
+       
+
+
+		// int flag=1;
+		// int i=0;
+		// Network1 net1=new Network1();
+		// net1.is=is;
+		// net1.start();
+  //   	while (net1.flag==0) {
+  //   		//sen("hello???");
+  //   		try {
+		// 		this.sleep(100);
+		// 	} catch (InterruptedException e) {
+		// 		// TODO Auto-generated catch block
+		// 		e.printStackTrace();
+		// 	}       
     		
-    		i++;
-    		if(i>30) {
-    			r++;
-    			i-=30;
-    			sen("ACK "+r);
-    		}
-    	}
-    	System.out.println("Net 1: "+net1.rec);
-    	System.out.println("waiting "+i);
+  //   		i++;
+  //   		if(i>30) {
+  //   			r++;
+  //   			i-=30;
+  //   			sen("ACK "+r);
+  //   		}
+  //   	}
+  //   	System.out.println("Net 1: "+net1.rec);
+  //   	System.out.println("waiting "+i);
     	
-    	net1=null;
+    	// net1=null;
 	}
 	public String enc(String s) {
 		String s1="";
@@ -144,12 +184,16 @@ class Network2 extends Thread{
     		if(s.equals("REQ")) {
     			bui();
     		}
-    		else {
-    			
-    		}
-
+            Nonce = 0;
     		s=inS();
-    		while(s.equals("OUTPUTCOMPLETE") == false) {
+    		while(s.equals("OUTPUTCOMPLETE") == false && s != null) {
+                String[] sssssB = s.split(" ");
+                if(sssssB[0].equals("ACK")){
+                    System.out.println("AP 收到了Msg4");
+                    s=inS();
+                    continue;
+                }
+                System.out.println("nounce is :"+Nonce);
 				System.out.println("Normal receiving : "+(ccmp.xo(s, Nonce)));
 				System.out.println("Trans receiving : "+enc(ccmp.xo(s, Nonce)));
 				Nonce++;
@@ -167,8 +211,7 @@ class Network2 extends Thread{
     		is.close(); //关闭Socket输入流
     		ssocket.close(); //关闭Socket
         }catch(Exception e){
-          System.out.println("Error:"+e);
-          System.out.println("2");
+            e.printStackTrace();
         }
     }
 }
