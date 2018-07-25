@@ -203,6 +203,7 @@ class Network2 extends Thread{
                         String[] s1=APMsg.split(" ");
                         System.out.println("AP 再次发送给 Client Msg3");
                         sen(APMsg);
+                        Nonce =0;
                         state = 6;
                     }
 
@@ -219,6 +220,8 @@ class Network2 extends Thread{
                         ANounce=s1[0];
                         RAndom = s1[1];
                         System.out.println("中间人从AP获得ANounce:"+ANounce+",和Random:"+RAndom);
+                        ccmp.ANounce=ANounce;
+
                         state = 2;
                         sen(APMsg);//给Client Anounce和Random
                     }
@@ -247,17 +250,27 @@ class Network2 extends Thread{
                          System.out.println("Receiving from client:"+clientMsg);
                          if(state == 6){
                             String[] s1=clientMsg.split(" ");
-                            if(s1[0].equals("ACK") == false && s1[0].equals("OUTPUTCOMPLETE") == false){
+                            if(s1[0].equals("ACK") == false && s1[0].equals("OUTPUTCOMPLETE") == false && s1[0] != null){
                                 if(sameNounceCounter>0){
-                                    System.out.println("上面的是Nounce被重置以后发送信息密文");
+                                    System.out.println("这是Nounce被重置以后发送信息密文和明文");
                                     sameNounceCounter--;
                                 }
+                                System.out.println("nounce is :"+Nonce);
+                                System.out.println("Normal receiving : "+(ccmp.xo(clientMsg, Nonce)));
+                                System.out.println("Trans receiving : "+enc(ccmp.xo(clientMsg, Nonce)));
+                                Nonce++;
                             }
                             senAP(clientMsg);
                          }
                          if(state == 5){
+                            String[] s1=clientMsg.split(" ");
                             System.out.println("获取到Msg4丢失的消息内容");
                             senAP(clientMsg);
+                            if(s1[0].equals("ACK") == false && clientMsg!=null){
+                                System.out.println("nounce is :"+Nonce);
+                                System.out.println("Trans receiving : "+enc(ccmp.xo(clientMsg, Nonce)));
+                                Nonce++;
+                            }
                             sameNounceCounter ++;
                          }
                          if(state == 4){
@@ -272,6 +285,7 @@ class Network2 extends Thread{
                             String[] s1=clientMsg.split(" ");
                             CNounce = s1[0];
                             System.out.println("中间人从Client获得CNounce:"+CNounce);
+                            ccmp.CNounce=CNounce;
                             state = 3;
                             senAP(clientMsg);      //发送给AP CNOUNE RANDOM
                          }
