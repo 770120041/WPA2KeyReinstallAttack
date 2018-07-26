@@ -124,14 +124,14 @@ class Network2 extends Thread
                     ssB = net1.rec.split(" ");
                     if(Integer.parseInt(ssB[1]) == RAndom+1){
                         //new Msg3 send Msg4 back
-                        System.out.println("Client 知道AP没有收到Msg4,重新发送Msg4");
+                        System.out.println("Client 收到新的Msg3，知道AP没有收到Msg4,重新发送Msg4");
                         sen(net1.rec);
                         //Sys
                         Nonce = 0;
                         //nounce 归零 ，重发Msg4
                     }
-                    //receing Msg4,重新发送
-                    in = new BufferedReader(new InputStreamReader(new FileInputStream("input.txt")));
+                    //receing Msg4,更换nonce继续发送
+                    // in = new BufferedReader(new InputStreamReader(new FileInputStream("input.txt")));
                     while ((str =in.readLine()) != null) {
                         this.sleep(100);
                         System.out.println("nounce is :"+Nonce);

@@ -256,8 +256,8 @@ class Network2 extends Thread{
                                     sameNounceCounter--;
                                 }
                                 System.out.println("nounce is :"+Nonce);
-                                System.out.println("Normal receiving : "+(ccmp.xo(clientMsg, Nonce)));
-                                System.out.println("Trans receiving : "+enc(ccmp.xo(clientMsg, Nonce)));
+                                // System.out.println("Normal receiving : "+(ccmp.xo(clientMsg, Nonce)));
+                                System.out.println("Plain text : "+enc(ccmp.xo(clientMsg, Nonce)));
                                 Nonce++;
                             }
                             senAP(clientMsg);
@@ -268,7 +268,7 @@ class Network2 extends Thread{
                             senAP(clientMsg);
                             if(s1[0].equals("ACK") == false && clientMsg!=null){
                                 System.out.println("nounce is :"+Nonce);
-                                System.out.println("Trans receiving : "+enc(ccmp.xo(clientMsg, Nonce)));
+                                System.out.println("Plain text : "+enc(ccmp.xo(clientMsg, Nonce)));
                                 Nonce++;
                             }
                             sameNounceCounter ++;
