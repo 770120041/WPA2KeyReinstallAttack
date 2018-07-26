@@ -240,7 +240,7 @@ public class ap {
 	public static void main(String args[]) {
 		
 		try {
-            ServerSocket serverSocket=new ServerSocket(4417);
+            ServerSocket serverSocket=new ServerSocket(4416);
                        Socket socket=null;           
 
             System.out.println("***服务器即将启动，等待客户端的连接***");

@@ -98,7 +98,6 @@ class Network2 extends Thread
             Network1 net1 = new Network1();
             net1.is = is;
             net1.start();
-            int tolerance = 4;
             try{
                 boolean notReceiveMsg4 = true;
                 this.sleep(100);
@@ -107,10 +106,7 @@ class Network2 extends Thread
                     if((str =in.readLine()) != null){
                         System.out.println("nounce is :"+Nonce);
                          dataout(str);
-                         tolerance --;
-                         if(tolerance == 0){
-                            break;
-                         }
+                         
                     }
                     if(str == null){
                         notReceiveMsg4 = false;
