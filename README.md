@@ -1,3 +1,4 @@
-对于相同的CNounce和Anounce为什么，和Nonce，为什么enc以后的结果不一样？？
-先运行AP和Adversary，在运行Client就行
-
+part1 and part2 fullversion contained
+part1 in branch part1
+part2 in branch master 
+the only difference is the port number
