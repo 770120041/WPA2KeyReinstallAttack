@@ -64,14 +64,10 @@ class ccmp{
 		return mac+workN(Nonce)+workT();
 	}
 	public static String xo(String tt,int Nonce) {
-		String text="";
-		for(int i=0;i<16;i++) {
-			int p=0;
-			if(i<tt.length())p=tt.charAt(i);
-			
-			text+=p/128+""+(p%128)/64+""+(p%64)/32+""+(p%32)/16+""+(p%16)/8+""+(p%8)/4+""+(p%4)/2+p%2;
-		}
+		String text=tt;
+		
 		String s="",s1=StringT(Nonce);
+	
 		for(int i=0;i<128;i++) {
 			s=s+(((text.charAt(i)-'0')^(s1.charAt(i)-'0')));
 		}
